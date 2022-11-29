@@ -86,11 +86,15 @@ const CommentsComp = ({comment}) => {
               </Text>
             </View>
           </View>
-          {comment.childComments.map((c, i) => {
-            return <Reply comment={c} />;
-          })}
         </View>
       </View>
+      {comment.childComments.map((c, i) => {
+        return (
+          <View style={[{marginLeft: 50}]}>
+            <Reply comment={c} />
+          </View>
+        );
+      })}
     </View>
   );
 };
@@ -179,14 +183,14 @@ const ReplyTo = ({setSendReply, comment}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 20,
   },
   formRow: {
     flexDirection: 'row',
     height: 'auto',
   },
   formItem: {
-    width: '75%',
+    width: '85%',
     flex: 0,
     backgroundColor: '#F2F2F2',
     borderBottomLeftRadius: 10,

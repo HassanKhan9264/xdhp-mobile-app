@@ -3,11 +3,12 @@ import React from 'react';
 import {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {Image} from 'react-native';
-import {Text} from 'react-native';
+import {Text, TextInput} from 'react-native';
 import CommentsComp, {Reply} from '../components/CommentsComp';
 import {AppColor} from '../shared/appColors';
 import {ServiceApi} from '../Api/ServiceApi';
 import {useEffect} from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 // const comments = [
 //   {
 //     id: 1,
@@ -57,7 +58,9 @@ import {useEffect} from 'react';
 
 const Comments = () => {
   console.log('these are the comments');
+  const a = require('../Assets/lady.png');
   const [comment, setComments] = useState([]);
+  const [writeComment, setWriteComment] = useState('');
   const commentsAndTheirReplies = [];
   const serviceApi = new ServiceApi();
 
@@ -72,26 +75,70 @@ const Comments = () => {
     // console.log('\n\n\n\n\n\n\n\n these are the comments', allComments.childCo);
   };
 
-  useEffect(() => {
+  const handleSendComment = () => {
+    setWriteComment('');
     commentsApi();
-  }, []);
+  };
 
-  //   for (let i = 0; i < comments.length; i++) {
-  //     for (let j = 0; j < comments.length; j++) {
-  //       if (comment[i].id == comments[j].reply_to) {
-  //         console.log('\n\n\n\n\n\n\n\n\n', {
-  //           comment: comments[i].id,
-  //           reply: comments[j].id + '' + comments[j].reply_to,
-  //         });
-  //       }
-  //     }
-  //   }
+  useEffect(() => {
+    console.log({writeComment});
+  }, [setWriteComment]);
 
   return (
     <>
       {comment?.map((c, i) => {
         return <>{<CommentsComp comment={c} />}</>;
       })}
+      <View
+        style={[
+          styles.writeCommentView,
+          {
+            height: 'auto',
+            borderTopWidth: 1,
+            paddingTop: 10,
+            // paddingBottom: 10,
+            borderTopColor: AppColor.lightGray,
+          },
+        ]}>
+        <View style={[styles.imageView, {borderRadius: 9999999}]}>
+          <Image source={a} style={[{height: 40, width: 40}]} />
+        </View>
+        <View
+          style={[
+            {
+              height: 'auto',
+              width: '80%',
+              // backgroundColor: 'blue',
+            },
+          ]}>
+          <TextInput
+            value={writeComment}
+            onChangeText={text => {
+              console.log({text});
+              setWriteComment(text);
+            }}
+            placeholder="Write a Comment"
+            style={[
+              {
+                height: 'auto',
+                width: '100%',
+                marginLeft: 5,
+                backgroundColor: 'white',
+              },
+            ]}></TextInput>
+        </View>
+        <View>
+          <Icon
+            name="ios-send"
+            size={30}
+            color={AppColor.greenButton}
+            onPress={() => {
+              handleSendComment();
+              console.log('send the commet');
+            }}
+          />
+        </View>
+      </View>
     </>
   );
 };
@@ -146,6 +193,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+  },
+  writeCommentView: {
+    // backgroundColor: 'red',
+    height: 50,
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // padding: 10,
   },
 });
 export default Comments;
