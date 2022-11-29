@@ -45,9 +45,11 @@ function ShippingAddress(props) {
   const billingFormikRef = useRef();
   const shippingDetails = route?.params?.shippingDetails;
   const [viewVisibility, setViewVisibility] = useState(false);
-  const [checked, setChecked] = useState(shippingDetails?.isBillingSame ?? true);
-  const [addressList,setAddressList] = useState([]);
-  
+  const [checked, setChecked] = useState(
+    shippingDetails?.isBillingSame ?? true,
+  );
+  const [addressList, setAddressList] = useState([]);
+
   const [countrys, setCountrys] = useState([]);
   const [provinces, setProvinces] = useState([
     {label: 'Sindh', value: 'Sindh'},
@@ -112,12 +114,11 @@ function ShippingAddress(props) {
     if (result && result.data) {
       hideLoader();
       navigation.navigate({
-                    name: 'CheckOut',
-                    params: {shippingDetails},
-                    merge: true,
-                  });
-      
-    } 
+        name: 'CheckOut',
+        params: {shippingDetails},
+        merge: true,
+      });
+    }
     // else {
     //   hideLoader();
     //   // alert('Something went wrong');
@@ -209,9 +210,18 @@ function ShippingAddress(props) {
               name: shippingDetails.shipping?.name ?? '',
               phone_number: shippingDetails.shipping?.phone_number ?? '',
               email: shippingDetails.shipping?.email ?? '',
-              country: shippingDetails.shipping?.country_id ? countrys.filter(country => country.value == shippingDetails.shipping?.country_id)[0] : '',
+              country: shippingDetails.shipping?.country_id
+                ? countrys.filter(
+                    country =>
+                      country.value == shippingDetails.shipping?.country_id,
+                  )[0]
+                : '',
               // province: shippingDetails.shipping?.province?.label ?? '',
-              city: shippingDetails.shipping?.country_id ? citys.filter(city => city.value == shippingDetails.shipping?.city_id)[0] : '',
+              city: shippingDetails.shipping?.country_id
+                ? citys.filter(
+                    city => city.value == shippingDetails.shipping?.city_id,
+                  )[0]
+                : '',
               // area: shippingDetails.shipping?.area ?? '',
               address: shippingDetails.shipping?.address ?? '',
             }}
@@ -574,9 +584,18 @@ function ShippingAddress(props) {
                 name: shippingDetails.billing?.name ?? '',
                 phone_number: shippingDetails.billing?.phone_number ?? '',
                 email: shippingDetails.billing?.email ?? '',
-                country: shippingDetails.billing?.country_id ? countrys.filter(country => country.value == shippingDetails.billing?.country_id)[0] : '',
+                country: shippingDetails.billing?.country_id
+                  ? countrys.filter(
+                      country =>
+                        country.value == shippingDetails.billing?.country_id,
+                    )[0]
+                  : '',
                 // province: shippingDetails.shipping?.province?.label ?? '',
-                city: shippingDetails.billing?.country_id ? citys.filter(city => city.value == shippingDetails.billing?.city_id)[0] : '',
+                city: shippingDetails.billing?.country_id
+                  ? citys.filter(
+                      city => city.value == shippingDetails.billing?.city_id,
+                    )[0]
+                  : '',
                 // area: shippingDetails.shipping?.area ?? '',
                 address: shippingDetails.billing?.address ?? '',
               }}
@@ -949,35 +968,34 @@ function ShippingAddress(props) {
                 ); // get form errors
                 var hasShippingFormErros =
                   Object.keys(shippingErrors).length != 0; // check if form has error
-                  var shippingValues = shippingRef.values;
+                var shippingValues = shippingRef.values;
                 console.log('Shipping errors', shippingErrors);
                 console.log('Shipping errors', hasShippingFormErros);
-                 console.log("Shipping form values", shippingValues);
-                if(!hasShippingFormErros){
+                console.log('Shipping form values', shippingValues);
+                if (!hasShippingFormErros) {
                   var shipping = {
                     ...shippingValues,
-                    address_line_1: "",
-                    address_line_2: "",
+                    address_line_1: '',
+                    address_line_2: '',
                     country_id: shippingValues.country.value,
                     city_id: shippingValues.city.value,
-                    state_id: 1 // dummy value
+                    state_id: 1, // dummy value
                   };
                   delete shipping.city;
                   delete shipping.country;
-                  console.log("shippingShipping",shipping);
+                  console.log('shippingShipping', shipping);
                   var shippingDetails = {
                     shipping,
-                    isBillingSame : checked,
-                    billing: {}
-                  }
+                    isBillingSame: checked,
+                    billing: {},
+                  };
                   navigation.navigate({
                     name: 'CheckOut',
                     params: {shippingDetails},
                     merge: true,
                   });
                 }
-              } else
-              {
+              } else {
                 shippingRef.handleSubmit(); // submit action to show user if there is any error
                 billingRef.handleSubmit(); // submit action to show user if there is any error
                 var shippingErrors = await shippingRef.validateForm(
@@ -988,47 +1006,47 @@ function ShippingAddress(props) {
                 ); // get form errors
                 var hasShippingFormErros =
                   Object.keys(shippingErrors).length != 0; // check if form has error
-                  var hasBillingFormErros =
+                var hasBillingFormErros =
                   Object.keys(billingErrors).length != 0; // check if form has error
-                  var shippingValues = shippingRef.values;
-                  var billingValues = billingRef.values;
+                var shippingValues = shippingRef.values;
+                var billingValues = billingRef.values;
                 console.log('Shipping errors', shippingErrors);
                 console.log('Shipping errors', hasShippingFormErros);
-                 console.log("Shipping form values", shippingValues);
+                console.log('Shipping form values', shippingValues);
 
                 console.log('billing errors', billingErrors);
                 console.log('billing errors', hasBillingFormErros);
-                 console.log("Billing form values", billingValues);
-                if(!hasBillingFormErros && !hasShippingFormErros){
+                console.log('Billing form values', billingValues);
+                if (!hasBillingFormErros && !hasShippingFormErros) {
                   var shipping = {
                     ...shippingValues,
-                    address_line_1: "",
-                    address_line_2: "",
+                    address_line_1: '',
+                    address_line_2: '',
                     country_id: shippingValues.country.value,
                     city_id: shippingValues.city.value,
-                    state_id: 1 // dummy value
+                    state_id: 1, // dummy value
                   };
-                  
+
                   var billing = {
                     ...billingValues,
-                    address_line_1: "",
-                    address_line_2: "",
+                    address_line_1: '',
+                    address_line_2: '',
                     country_id: billingValues.country.value,
                     city_id: billingValues.city.value,
-                    state_id: 1 // dummy value
+                    state_id: 1, // dummy value
                   };
                   delete shipping.city;
                   delete shipping.country;
-                  console.log("shipping",shipping);
+                  console.log('shipping', shipping);
                   delete billing.city;
                   delete billing.country;
-                  console.log("billing",billing);
+                  console.log('billing', billing);
                   var shippingDetails = {
                     shipping,
-                    isBillingSame : checked,
+                    isBillingSame: checked,
                     billing,
-                  }
-                  postBillingAdress(shippingDetails)
+                  };
+                  postBillingAdress(shippingDetails);
                   // navigation.navigate({
                   //   name: 'CheckOut',
                   //   params: {shippingDetails},

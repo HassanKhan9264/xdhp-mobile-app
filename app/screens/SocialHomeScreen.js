@@ -70,7 +70,7 @@ function SocialHomeScreen(props) {
   ];
 
   useLayoutEffect(() => {
-    console.log('Social Home Screen \n\n\n\n\n\n\n\n\n\n');
+    //console.log('Social Home Screen \n\n\n\n\n\n\n\n\n\n');
     navigation.addListener('focus', () => {
       navigation.getParent().setOptions({
         title: 'Social',
@@ -86,20 +86,20 @@ function SocialHomeScreen(props) {
             {icons.map(item => (
               <Pressable
                 onPress={() => {
-                  console.log('icon', item);
+                  //console.log('icon', item);
                   switch (item.type) {
                     case 1:
-                      console.log('1');
+                      //console.log('1');
                       navigation.navigate('chat');
                       break;
 
                     case 2:
                       navigation.navigate('notifications');
-                      console.log('2');
+                      //console.log('2');
                       break;
 
                     case 3:
-                      console.log('3');
+                      //console.log('3');
                       break;
                   }
                 }}>
@@ -120,7 +120,7 @@ function SocialHomeScreen(props) {
   }, []);
 
   const getAllPosts = async () => {
-    console.log('Share');
+    //console.log('Share');
     let user = await getUser();
     setUser(user.userData[0]);
     showLoader();
@@ -129,7 +129,7 @@ function SocialHomeScreen(props) {
       type: 'photo',
     };
     var result = await new ServiceApi().allPosts(data);
-    console.log('getAllPosts', result);
+    //console.log('getAllPosts', result);
     if (result && result.data) {
       hideLoader();
       setOffset(result.data.offset);
@@ -146,7 +146,7 @@ function SocialHomeScreen(props) {
   const sharePost = async data => {
     showLoader();
     var result = await new ServiceApi().creatPost(data);
-    console.log('sharePost', result);
+    //console.log('sharePost', result);
     if (result && result.data) {
       hideLoader();
       getAllPosts();
@@ -161,7 +161,7 @@ function SocialHomeScreen(props) {
   const likePost = async data => {
     showLoader();
     var result = await new ServiceApi().likePostOrComment(data);
-    console.log('likePost', result);
+    //console.log('likePost', result);
     if (result && result.data) {
       hideLoader();
       getAllPosts();
@@ -174,7 +174,7 @@ function SocialHomeScreen(props) {
   const postDelete = async id => {
     showLoader();
     var result = await new ServiceApi().deletePost(id);
-    console.log('postDelete', result);
+    // //console.log('postDelete', result);
     if (result && result.message == 'Post Deleted') {
       hideLoader();
       getAllPosts();
@@ -225,8 +225,8 @@ function SocialHomeScreen(props) {
   };
 
   const UserPost = ({item}) => {
-    console.log('postss', item);
-    console.log('asdsadasdsada', item.url[0]?.url);
+    // //console.log('postss', item);
+    // //console.log('asdsadasdsada', item.url[0]?.url);
     let postImage = item.url[0]?.url;
     return (
       <View style={styles.userPost}>
@@ -344,7 +344,7 @@ function SocialHomeScreen(props) {
                     let like = {
                       post_id: item?.post_id,
                     };
-                    console.log('like12346', like);
+                    // //console.log('like12346', like);
                     likePost(like);
                   }
                 }}
@@ -421,7 +421,7 @@ function SocialHomeScreen(props) {
           </View>
           <View style={styles.transparentView} />
           <View>
-            <Comments />
+            <Comments item={item} />
           </View>
         </View>
       </View>
@@ -429,7 +429,7 @@ function SocialHomeScreen(props) {
   };
 
   const loadMore = () => {
-    console.log('offset', offset);
+    //console.log('offset', offset);
     if (offset != -1) getAllPosts();
   };
 
@@ -445,7 +445,7 @@ function SocialHomeScreen(props) {
         result?.assets.forEach(x => {
           mixedUri.push({uri: x.uri});
         });
-        console.log('mixedUri', mixedUri[0]);
+        //console.log('mixedUri', mixedUri[0]);
         setPostImageOrVideo(mixedUri[0]);
       },
     },
@@ -460,7 +460,7 @@ function SocialHomeScreen(props) {
         result?.assets.forEach(x => {
           mixedUri.push({uri: x.uri});
         });
-        console.log('mixedUri', mixedUri[0]);
+        //console.log('mixedUri', mixedUri[0]);
         setPostImageOrVideo(mixedUri[0]);
       },
     },
@@ -520,9 +520,9 @@ function SocialHomeScreen(props) {
                 mode="contained"
                 onPress={async () => {
                   var post = CreatPost.current.values;
-                  console.log('asdsadsad', post);
+                  //console.log('asdsadsad', post);
                   postdescription = post?.description;
-                  console.log('postdescription', postdescription);
+                  //console.log('postdescription', postdescription);
                   if (post || postImageOrVideo) {
                     let createPostData = {
                       description: post?.description,
@@ -536,10 +536,10 @@ function SocialHomeScreen(props) {
                       shared_description: '',
                       parent_post_id: 0,
                     };
-                    console.log('createPostData', createPostData);
+                    //console.log('createPostData', createPostData);
                     setOffset(0);
 
-                    console.log('this is share post pre');
+                    //console.log('this is share post pre');
                     sharePost(createPostData);
                     postdescription = null;
                     setPopupVisible(false);
@@ -575,13 +575,13 @@ function SocialHomeScreen(props) {
               validateOnBlur={false}
               // validationSchema={reviewSchema}
               onSubmit={async (values, action) => {
-                console.log(
-                  '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFormikValues',
-                  values,
-                );
+                //console.log(
+                // '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFormikValues',
+                // values,
+                // );
                 postdescription = values.description;
                 let response = await ServiceApi.creatPost(postdescription);
-                console.log({postdescription});
+                //console.log({postdescription});
                 return;
               }}>
               {formikProps => (
@@ -680,7 +680,7 @@ function SocialHomeScreen(props) {
           renderItem={UserPost}
           onEndReached={() => {
             if (!onEndReachedCalledDuringMomentum) {
-              console.log('new');
+              //console.log('new');
               setOnEndReachedCalledDuringMomentum(false);
               loadMore();
             }

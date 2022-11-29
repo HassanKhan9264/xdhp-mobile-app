@@ -9,55 +9,66 @@ import {AppColor} from '../shared/appColors';
 import {ServiceApi} from '../Api/ServiceApi';
 import {useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-// const comments = [
-//   {
-//     id: 1,
-//     name: 'Henry Cavil',
-//     comment: 'thats badass!',
-//     reply: false,
-//   },
-//   {
-//     id: 2,
-//     name: 'Millie Bobby Brown',
-//     comment: 'Thanks Henry ❤ 2',
-//     reply_to: 1,
-//     parent_comment_id: 1,
-//     reply: true,
-//   },
-//   {
-//     id: 3,
-//     name: 'Millie Bobby Brown',
-//     comment: 'Thanks Henry ❤ 3',
-//     reply_to: 2,
-//     parent_comment_id: 1,
-//     reply: true,
-//   },
-//   {
-//     id: 4,
-//     name: 'Millie Bobby Brown',
-//     comment: 'Thanks Henry ❤ 4',
-//     // reply_to: 1,
-//     // parent_comment_id: 1,
-//     reply: false,
-//   },
-//   {
-//     id: 5,
-//     name: 'Henry Cavil',
-//     comment: 'Hail Anolna 😂1',
-//     reply: false,
-//   },
-//   {
-//     id: 6,
-//     name: 'Millie Bobby Brown',
-//     comment: 'henryyyyyy 😂',
-//     reply_to: 5,
-//     parent_comment_id: 5,
-//     reply: true,
-//   },
-// ];
 
 const Comments = () => {
-  console.log('these are the comments');
+  const comments = [
+    {
+      id: 1,
+      name: 'Henry Cavil',
+      description: 'thats badass!',
+      reply: false,
+      likes: 100,
+      childComments: [
+        {
+          id: 2,
+          name: 'Millie Bobby Brown',
+          description: 'Thanks Henry ❤ 2',
+          reply_to: 1,
+          parent_comment_id: 1,
+          reply: true,
+          likes: 5,
+        },
+        {
+          id: 3,
+          name: 'Millie Bobby Brown',
+          description: 'Thanks Henry ❤ 3',
+          reply_to: 2,
+          parent_comment_id: 1,
+          reply: true,
+          likes: 2,
+        },
+        {
+          id: 4,
+          name: 'Millie Bobby Brown',
+          description: 'Thanks Henry ❤ 4',
+          // reply_to: 1,
+          parent_comment_id: 1,
+          reply: false,
+          likes: 10,
+        },
+      ],
+    },
+
+    {
+      id: 5,
+      name: 'Henry Cavil',
+      description: 'Hail Anolna 😂1',
+      reply: false,
+      likes: 20,
+      childComments: [
+        {
+          id: 6,
+          name: 'Millie Bobby Brown',
+          description: 'henryyyyyy 😂',
+          reply_to: 5,
+          parent_comment_id: 5,
+          reply: true,
+          likes: 50,
+        },
+      ],
+    },
+  ];
+
   const a = require('../Assets/lady.png');
   const [comment, setComments] = useState([]);
   const [writeComment, setWriteComment] = useState('');
@@ -65,29 +76,44 @@ const Comments = () => {
   const serviceApi = new ServiceApi();
 
   const commentsApi = async () => {
-    const allComments = await serviceApi.allComments(13);
-    setComments(allComments.data);
-    console.log('\n\n\n\n\n\n\n\n these are the comments', allComments);
-    console.log(
-      '\n\n\n\n\n\n\n\n these are the comments data',
-      allComments.data,
-    );
-    // console.log('\n\n\n\n\n\n\n\n these are the comments', allComments.childCo);
+    // const allComments = await serviceApi.allComments(13);
+    // setComments(allComments.data);
   };
 
-  const handleSendComment = () => {
+  const handleSendComment = async () => {
+    // const resposne = await serviceApi.writeComment({
+    //   description: writeComment,
+    //   post_id: comment.post_id,
+    //   reply_to: comment.reply_to,
+    //   parent_comment_id: comment.parent_comment_id,
+    // });
+    let dummyComment = {
+      id: Math.random(),
+      name: 'New Comment' + Math.random(),
+      description: writeComment,
+      reply: false,
+      likes: Math.floor(Math.random() * 10),
+      childComments: [],
+    };
+    setComments([dummyComment, ...comment]);
     setWriteComment('');
     commentsApi();
+    console.log({resposne});
   };
 
   useEffect(() => {
     console.log({writeComment});
   }, [setWriteComment]);
 
+  useEffect(() => {
+    // commentsApi();
+    setComments(comments);
+  }, [setComments]);
+
   return (
     <>
       {comment?.map((c, i) => {
-        return <>{<CommentsComp comment={c} />}</>;
+        return <>{<CommentsComp comment={c} setComments={setComments} />}</>;
       })}
       <View
         style={[

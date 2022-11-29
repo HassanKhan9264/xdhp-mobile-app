@@ -5,27 +5,38 @@ import {StyleSheet} from 'react-native';
 import {Image} from 'react-native';
 import {Text} from 'react-native';
 import {TextInput} from 'react-native';
+import {createIconSetFromFontello} from 'react-native-vector-icons';
 import {ServiceApi} from '../Api/ServiceApi';
 import {AppColor} from '../shared/appColors';
 
-const CommentsComp = ({comment}) => {
-  const [reply, setReply] = useState(true);
-  const [sendReply, setSendReply] = useState({});
-  const serviceApi = new ServiceApi();
-  // var hoursDifference = Math.floor(difference/1000/60/60);
-  // difference -= hoursDifference*1000*60*60
+const CommentsComp = ({comment, setCommets}) => {
+  const a = require('../Assets/lady.png');
 
-  //   {
-  //     "description": "test 3 completed",
-  //     "post_id": 45,
-  //     "reply_to": 42,
-  //     "parent_comment_id": 17
-  // }
+  const [reply, setReply] = useState(true);
+  const [sendReply, setSendReply] = useState('');
+  const serviceApi = new ServiceApi();
 
   const handleReplies = async () => {
-    const response = await serviceApi.writeComment(sendReply);
-    setSendReply({});
-    console.log('response', response);
+    // const response = await serviceApi.writeComment(sendReply);
+    // setComments(comment.childComments[reply, ...comment.childComments])
+
+    const dummySendReply = {
+      id: Math.random(),
+      name: 'New Commnet',
+      description: sendReply,
+      reply_to: comment.id,
+      parent_comment_id: comment.id,
+      reply: true,
+      likes: Math.floor(Math.random() * 10),
+    };
+
+    console.log('dummySendReply:', {dummySendReply}, {comment});
+
+    comment.childComments = [dummySendReply, ...comment.childComments];
+    console.log({'handle replies': comment});
+    setCommets(comment);
+    setSendReply('');
+    // console.log('response', response);
   };
 
   useEffect(() => {
@@ -33,69 +44,76 @@ const CommentsComp = ({comment}) => {
   }, [setReply]);
   useEffect(() => {
     console.log('send reply: ', sendReply);
-  }, [setSendReply]);
+  }, [setSendReply, handleReplies]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.formRow}>
-        <View style={styles.formIcon}>
-          <View style={[styles.imageView]}>
-            <Image
-              source={require('../Assets/watch2.png')}
-              style={[styles.image]}
-            />
+    <>
+      <View style={styles.container}>
+        <View style={styles.formRow}>
+          <View style={styles.formIcon}>
+            <View style={[styles.imageView]}>
+              <Image
+                source={require('../Assets/watch2.png')}
+                style={[styles.image]}
+              />
+            </View>
           </View>
-        </View>
-        <View style={[styles.formItem]}>
-          <View style={[styles.name]}>
-            <Text style={[styles.text, {fontWeight: '700'}]}>
-              {comment.name}
+          <View style={[styles.formItem]}>
+            <View style={[styles.name]}>
+              <Text style={[styles.text, {fontWeight: '700'}]}>
+                {comment.name}
+              </Text>
+              <Text style={[{color: 'lightgrey'}]}>3h</Text>
+            </View>
+            <Text style={[styles.text, {marginTop: 10}]}>
+              {comment.description}
             </Text>
-            <Text style={[{color: 'lightgrey'}]}>3h</Text>
-          </View>
-          <Text style={[styles.text, {marginTop: 10}]}>
-            {comment.description}
-          </Text>
-          <View style={[styles.like]}>
-            <View>
-              <View style={[{flexDirection: 'row'}]}>
-                <Text style={[{color: 'lightgrey'}]}>Like</Text>
+            <View style={[styles.like]}>
+              <View>
+                <View style={[{flexDirection: 'row'}]}>
+                  <Text style={[{color: 'lightgrey'}]}>
+                    Like {comment.likes}
+                  </Text>
+                  <Text
+                    style={[{color: 'lightgrey', marginLeft: 10}]}
+                    onPress={() => setReply(!reply)}>
+                    Reply
+                  </Text>
+                </View>
+                <View style={[replyTo.con, {width: 230, borderRadius: 100}]}>
+                  {reply == true && (
+                    <>
+                      <ReplyTo comment={comment} setSendReply={setSendReply} />
+                      <Text
+                        onPress={() => handleReplies()}
+                        style={[{color: 'black'}]}>
+                        Send
+                      </Text>
+                    </>
+                  )}
+                </View>
+              </View>
+              <View>
                 <Text
-                  style={[{color: 'lightgrey', marginLeft: 10}]}
-                  onPress={() => setReply(!reply)}>
-                  Reply
+                  style={[
+                    {color: 'lightgrey', fontSize: 16, fontWeight: '700'},
+                  ]}>
+                  ...
                 </Text>
               </View>
-              <View style={[replyTo.con, {width: 230, borderRadius: 100}]}>
-                {reply == true && (
-                  <>
-                    <ReplyTo setSendReply={setSendReply} comment={comment} />
-                    <Text
-                      onPress={() => handleReplies}
-                      style={[{color: 'black'}]}>
-                      Send
-                    </Text>
-                  </>
-                )}
-              </View>
-            </View>
-            <View>
-              <Text
-                style={[{color: 'lightgrey', fontSize: 16, fontWeight: '700'}]}>
-                ...
-              </Text>
             </View>
           </View>
         </View>
+        {comment.childComments.length > 0 &&
+          comment.childComments?.map((c, i) => {
+            return (
+              <View style={[{marginLeft: 50}]}>
+                <Reply comment={c} />
+              </View>
+            );
+          })}
       </View>
-      {comment.childComments.map((c, i) => {
-        return (
-          <View style={[{marginLeft: 50}]}>
-            <Reply comment={c} />
-          </View>
-        );
-      })}
-    </View>
+    </>
   );
 };
 
@@ -126,16 +144,14 @@ export const Reply = ({comment}) => {
           <View style={[styles.like]}>
             <View>
               <View style={[{flexDirection: 'row'}]}>
-                <Text style={[{color: 'lightgrey'}]}>Like</Text>
-                {/* <Text
-                  style={[{color: 'lightgrey', marginLeft: 10}]}
-                  onPress={() => setReply(!reply)}>
-                  Reply
-                </Text> */}
+                <Text
+                  style={[{color: 'lightgrey'}]}
+                  onPress={() => {
+                    comment.like++;
+                  }}>
+                  Like {comment.likes}
+                </Text>
               </View>
-              {/* <View style={[replyTo.con, {width: 150, borderRadius: 100}]}>
-                {reply == true && <ReplyTo />}
-              </View> */}
             </View>
             <View>
               <Text
@@ -150,7 +166,7 @@ export const Reply = ({comment}) => {
   );
 };
 
-const ReplyTo = ({setSendReply, comment}) => {
+const ReplyTo = ({comment, setSendReply}) => {
   return (
     <View
       style={[
@@ -163,19 +179,11 @@ const ReplyTo = ({setSendReply, comment}) => {
           width: '100%',
         },
       ]}>
-      {/* <Text style={{backgroundColor: 'black'}}>please kashif</Text> */}
       <TextInput
         placeholder="Reply"
         placeholderTextColor={AppColor.lightGray}
         style={[{color: AppColor.dark}]}
-        onChangeText={text =>
-          setSendReply({
-            description: text,
-            post_id: comment.post_id,
-            reply_to: comment.reply_to,
-            parent_comment_id: comment.parent_comment_id,
-          })
-        }></TextInput>
+        onChangeText={text => setSendReply(text)}></TextInput>
     </View>
   );
 };

@@ -25,7 +25,7 @@ function App(props) {
 
   const checkInitial = async () => {
     let user = await getUser();
-    console.log('user1235', user);
+    // console.log('user1235', user);
     if (user) setRoute('home');
     setIsLoggedinCheck(true);
   };
