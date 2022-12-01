@@ -73,13 +73,15 @@ function MatrimonialsScreen(props) {
       type: 2,
       onPress: () => {
         console.log('2');
+        navigation.naviagate('chat');
       },
     },
     {
       icon: require('../Assets/bell.png'),
       type: 3,
       onPress: () => {
-        console.log('3');
+        // console.log('3');
+        navigation.naviagate('notifications');
       },
     },
     {

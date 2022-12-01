@@ -38,6 +38,7 @@ import moment from 'moment';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {longPressGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/LongPressGestureHandler';
+import {navigate} from '../helpers/navigationHelper';
 
 function EventsScreen(props) {
   const {navigation, route} = props;
@@ -79,14 +80,14 @@ function EventsScreen(props) {
       icon: require('../Assets/message.png'),
       type: 2,
       onPress: () => {
-        console.log('2');
+        navigation.navigate('chat');
       },
     },
     {
       icon: require('../Assets/bell.png'),
       type: 3,
       onPress: () => {
-        console.log('3');
+        navigation.navigate('notifications');
       },
     },
     {

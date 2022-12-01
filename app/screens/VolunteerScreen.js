@@ -50,14 +50,16 @@ function VolunteerScreen(props) {
       icon: require('../Assets/message.png'),
       type: 1,
       onPress: () => {
-        console.log('2');
+        // console.log('2');
+        navigation.navigate('chat');
       },
     },
     {
       icon: require('../Assets/bell.png'),
       type: 2,
       onPress: () => {
-        console.log('3');
+        // console.log('3');
+        navigation.navigate('notifications');
       },
     },
     {

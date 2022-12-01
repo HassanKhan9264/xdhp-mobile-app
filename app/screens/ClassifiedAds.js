@@ -71,20 +71,23 @@ export const ClassifiedAds = props => {
       onPress: () => {
         console.log('1');
         // setCreateEventPopupVisible(true);
+        navigation.navigate('createjob');
       },
     },
     {
       icon: require('../Assets/message.png'),
       type: 2,
       onPress: () => {
-        console.log('2');
+        // console.log('2');
+        navigation.navigate('chat');
       },
     },
     {
       icon: require('../Assets/bell.png'),
       type: 3,
       onPress: () => {
-        console.log('3');
+        // console.log('3');
+        navigation.navigate('notifications');
       },
     },
     {

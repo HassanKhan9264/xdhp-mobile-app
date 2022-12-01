@@ -27,6 +27,7 @@ import DrawerRoute from './drawerRoute';
 import StartPoll from '../screens/StartPollScreen';
 import InviteFriend from '../screens/InviteFriend';
 import CreateCampaign from '../screens/CreateCampaign';
+import CreateJob from '../screens/createJob';
 const Stack = createNativeStackNavigator();
 
 function MainRoute({route = 'login'}) {
@@ -177,6 +178,12 @@ const routes = [
     name: 'createcampaign',
     title: 'Create Campaign',
     component: CreateCampaign,
+    headerShown: true,
+  },
+  {
+    name: 'createjob',
+    title: 'Create Job',
+    component: CreateJob,
     headerShown: true,
   },
 ];
